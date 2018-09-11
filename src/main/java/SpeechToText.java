@@ -15,20 +15,18 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class SpeechToText extends Thread{
+public class SpeechToText extends Thread {
     String fileName;
 
-    SpeechToText(String filename){
-        this.fileName=filename;
+    SpeechToText(String filename) {
+        this.fileName = filename;
     }
 
-    public void run(){
+    public void run() {
         try (SpeechClient speechClient = SpeechClient.create()) {
 
-            // Reads the audio file into memory
-            Path path = Paths.get("/home/zadmin/IdeaProjects/ZeeVoice/src/main/resources/scriptsRecordings/smallFiles/"+fileName);
-
-            //String[] nameSeperatingExtension = fileName.split(".",-2);
+            Path path = Paths.get("/home/zadmin/IdeaProjects/ZeeVoice/src/main/resources/scriptsRecordings/smallFiles/" + fileName);
+            //getting the path of the audio file
 
             byte[] data = Files.readAllBytes(path);
             ByteString audioBytes = ByteString.copyFrom(data);
@@ -46,11 +44,11 @@ public class SpeechToText extends Thread{
             // Performs speech recognition on the audio file
             RecognizeResponse response = speechClient.recognize(config, audio);
             List<SpeechRecognitionResult> results = response.getResultsList();
-            File file =new File("/home/zadmin/Documents/writeOutputs/"+currentThread().getId()+".txt");
+            File file = new File("/home/zadmin/Documents/writeOutputs/" + currentThread().getId() + ".txt");
             FileWriter fileWriter = new FileWriter(file);
             //creating a filewriter to writer data to a file
 
-            fileWriter.write("Transcription of "+fileName+": ");
+            fileWriter.write("Transcription of " + fileName + ": ");
             for (SpeechRecognitionResult result : results) {
                 // There can be several alternative transcripts for a given chunk of speech. Just use the
                 // first (most likely) one here.
